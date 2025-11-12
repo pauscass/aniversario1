@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuestro Aniversario 🤎</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background-color: #f3eee8;
+      color: #4a3f35;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 600px;
+      padding: 20px;
+    }
+
+    input {
+      padding: 10px;
+      border: 1px solid #c8b89d;
+      border-radius: 10px;
+      outline: none;
+      background-color: #f9f7f3;
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: #c8b89d;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #b79f7a;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .countdown {
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+
+    img {
+      width: 250px;
+      border-radius: 15px;
+      margin-top: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .card {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 15px;
+      background-color: #e7dfd4;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      font-size: 1rem;
+      line-height: 1.6;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .final-screen {
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .final-screen h2 {
+      font-size: 1.5rem;
+      color: #4a3f35;
+      margin-top: 40px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Pantalla 1 -->
+    <div id="screen1">
+      <h2>Ingresa nuestra fecha para desbloquear 💫</h2>
+      <input type="date" id="anniversaryInput" />
+      <br />
+      <button onclick="checkDate()">Desbloquear recuerdos</button>
+      <p id="error" style="color:#a97d5d;"></p>
+    </div>
+
+    <!-- Pantalla 2 -->
+    <div id="screen2" class="hidden">
+      <h2>Llevamos exactamente:</h2>
+      <div id="countdown" class="countdown"></div>
+      <img id="photo" src="pasado.jpg" alt="Nosotros en el pasado" onclick="showNowPhoto()" />
+    </div>
+
+    <!-- Pantalla 3 -->
+    <div id="screen3" class="hidden">
+      <div class="card">
+        <h3>Mi carta para ti 🤎</h3>
+        <p id="message">
+          Hola mi Adri, ¿cómo estás? ¿sabés que día es hoy? Es nuestro aniversario #9, has estado conmigo por más
+          de un tercio de mi vida, 36% de mi vida para ser exacta, pero de ese 36% has estado el 100% del tiempo conmigo.
+          Has estado en cada momento, en cada pensamiento, en cada lugar. Tu amor me ha a acompañado durante todos estos años.
+          Me gusta pensar en ti, desde que estamos juntos el último pensamiento de la noche has sido tú, pensar en ti me 
+          ayuda a dormir. Contigo me siento a salvo, me siento segura porque me amas. Amo ver como me miras, tus gestos dulces.
+          Amo cada parte de ti. Amo como ries, como sonries, como tratas de ser serio y fallas. No podría imaginar un mundo
+          sin ti, eres lo que le da alegría a mis días. Has estado tanto tiempo conmigo que imaginarme una vida sin ti me resulta
+          imposible, no podría imaginar un día en que no pensará en ti. Te pienso en cada momento, cuando veo algo tierno,
+          cuando veo cosas con sabor a mango jaja. Recuerdo cada vez que me hiciste pensar que eras maravilloso y que me hiciste
+          sentir amada. Tu dandome la mano por primera vez, tu bailando conmigo, tu caminando conmigo aunque lloviera y acabarás
+          empapado, tu dandome chocolate cada vez que pudiste. Recuerdo con mucha ternura como empezó todo, estabamos chiquitos,
+          y aun asi encontraste la forma de hacerme sentir amada. Me encanta haber crecido junto a ti, me has hecho ser dulce
+          con las personas, me ayudas a calmarme, siempre me apoyas. Eres mi amor, quiero llamarte asi toda la vida; quiero, al
+          igual que lo hago hoy en día, saber que siempre puedo buscarte cuando necesito apoyo, cuando necesito amor.
+          Eres todo lo que quiero, eres perfecto, TE AMO.
+        </p>
+        <button id="heartButton">❤️</button>
+      </div>
+    </div>
+
+    <!-- Pantalla 4 -->
+    <div id="screen4" class="hidden">
+      <h3>Para desbloquear la sorpresa final...</h3>
+      <p>Escribe la palabra secreta 🐾</p>
+      <input type="text" id="secretInput" placeholder="Pista: es una palabra seria" />
+      <br />
+      <button onclick="checkSecret()">Comprobar</button>
+      <p id="secretError" style="color:#a97d5d;"></p>
+    </div>
+
+    <!-- Pantalla 5 -->
+    <div id="screen5" class="hidden final-screen">
+      <h2>Te has ganado un millón de besitos 😚💋</h2>
+      <p>Y quiero seguir contando años contigo 🤎</p>
+    </div>
+  </div>
+
+  <script>
+    const correctDate = "2016-11-12";
+    const startTime = new Date("2016-11-12T16:00:00");
+
+    function showScreen(current, next) {
+      document.getElementById(current).classList.add("hidden");
+      document.getElementById(next).classList.remove("hidden");
+    }
+
+    function checkDate() {
+      const input = document.getElementById("anniversaryInput").value;
+      const error = document.getElementById("error");
+      if (input === correctDate) {
+        showScreen("screen1", "screen2");
+        startCountdown();
+      } else {
+        error.textContent = "¿Seguro recuerdas cuándo empezó nuestra historia? 😚";
+      }
+    }
+
+    function startCountdown() {
+      const countdown = document.getElementById("countdown");
+      setInterval(() => {
+        const now = new Date();
+        const diff = now - startTime;
+        const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+        const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44));
+        const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        countdown.textContent = `${years} años, ${months} meses, ${days} días, ${hours}h ${minutes}m ${seconds}s`;
+      }, 1000);
+    }
+
+    function showNowPhoto() {
+      const img = document.getElementById("photo");
+      img.src = "ahora.jpg";
+      img.alt = "Nosotros ahora";
+      img.onclick = null;
+      setTimeout(() => showScreen("screen2", "screen3"), 1500);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("heartButton").addEventListener("click", () => {
+        showScreen("screen3", "screen4");
+      });
+    });
+
+    function checkSecret() {
+      const secret = document.getElementById("secretInput").value.trim().toLowerCase();
+      const error = document.getElementById("secretError");
+      if (secret === "nutria") {
+        showScreen("screen4", "screen5");
+      } else {
+        error.textContent = "Mmm... esa no es la palabra secreta 🫢";
+      }
+    }
+  </script>
+</body>
+</html>
